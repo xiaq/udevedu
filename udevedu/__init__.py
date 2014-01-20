@@ -59,6 +59,14 @@ def main():
             logging.error('Loading of %s failed', fname)
             logging.exception(e)
 
+    for h in hooks:
+        if hasattr(h, 'init'):
+            try:
+                h.init()
+            except Exception as e:
+                logging.error('Initialization of %s failed', h.__file__)
+                logging.exception(e)
+
     while True:
         try:
             context = pyudev.Context()
