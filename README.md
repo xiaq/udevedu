@@ -13,6 +13,25 @@ Put hooks in `~/.config/udevedu/hooks`, which will be created the first time
 `udevedu` is invoked. Some sample hooks (read: hooks used by me, xiaq) are
 contained in the `hook/` directory of the repository.
 
+## Anatomy of hook scripts
+
+Three functions are looked for in hook scripts: `init`, `check` and `react`.
+They are all optional.
+
+`init` function is called after udevedu has started and collected all hook
+scripts.
+
+`check` and `react` is called when a udev event is received. If `check`
+doesn't exist or returns a true value, `react` is called. Both are passed two
+positional arguments, `action` and `device` which come from
+[pyudev.Monitor.receive_device](http://pyudev.readthedocs.org/en/latest/api/pyudev.html#pyudev.Monitor.receive_device).
+
+Notes:
+
+* `check` is actually not necessary, but it would save you one level of
+  indentation.
+* `check` and `react` are called off the main thread, so that they may block.
+
 ## Why not just write [udev rules](http://www.freedesktop.org/software/systemd/man/udev.html)?
 
 Because udevedu runs as an unpriviledged user in arbitrary environment - e.g.
@@ -32,3 +51,6 @@ Other small bonuses:
 ## TODO
 
 * Automatic reload of hook scripts
+
+* `pyudev.Monitor.receive_device` is deprecated, should use new interface;
+  maybe also use the asynchronous `pyudev.MonitorObserver`?
