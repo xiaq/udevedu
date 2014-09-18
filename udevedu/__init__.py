@@ -9,6 +9,7 @@ import os
 import sys
 import imp
 import glob
+import errno
 import logging
 from threading import Thread
 from functools import partial
@@ -67,18 +68,20 @@ def main():
                 logging.error('Initialization of %s failed', h.__file__)
                 logging.exception(e)
 
-    while True:
-        try:
-            context = pyudev.Context()
-            monitor = pyudev.Monitor.from_netlink(context)
+    try:
+        context = pyudev.Context()
+        monitor = pyudev.Monitor.from_netlink(context)
 
-            for args in monitor:
-                # args is (action, device)
-                for h in hooks:
-                    spawn_partial(process_hook, h, args)
-        except KeyboardInterrupt:
-            logging.warn('User interrupt, exiting')
-            break
-        except IOError as e:
-            logging.warn('Recovering from IOError, continue polling')
-            logging.exception(e)
+        while True:
+            try:
+                for args in monitor:
+                    # args is (action, device)
+                    for h in hooks:
+                        spawn_partial(process_hook, h, args)
+            except IOError as e:
+                if e.errno == errno.EINTR:
+                    continue
+                logging.warn('Recovering from IOError, continue polling')
+                logging.exception(e)
+    except KeyboardInterrupt:
+        logging.warn('User interrupt, exiting')
