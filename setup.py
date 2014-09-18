@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 import udevedu
 
@@ -10,7 +10,7 @@ if __name__ == '__main__':
         long_description=udevedu.__doc__,
         version=udevedu.__version__,
         license='BSD 2-clause',
-        packages=['udevedu'],
+        packages=find_packages(),
         install_requires=[
             'pyudev',
             'pyxdg',
