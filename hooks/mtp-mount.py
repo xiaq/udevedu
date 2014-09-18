@@ -38,6 +38,8 @@ def react(action, device):
         except OSError as e:
             print 'but failed to create mountpoint %s' % mp
             return
+        else:
+            print 'created mountpoint %s, mouting' % mp
 
         e = invoke('jmtpfs', '-device=%s,%s' % (bus, dev), mp)
         if e is None:
@@ -45,7 +47,8 @@ def react(action, device):
 
     elif action == 'remove':
         if (bus, dev) not in mounted:
-            print "- I didn't seem to have mounted it -",
+            print "but I didn't seem to have mounted it, unmounting anyway"
         else:
+            print 'unmounting'
             mounted.remove((bus, dev))
         invoke('fusermount', '-u', mp)
