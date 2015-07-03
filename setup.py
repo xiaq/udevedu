@@ -10,7 +10,7 @@ if __name__ == '__main__':
         long_description=udevedu.__doc__,
         version=udevedu.__version__,
         license='BSD 2-clause',
-        packages=['udevedu'],
+        packages=['udevedu', 'udevedu.hooks', ],
         install_requires=[
             'pyudev',
             'pyxdg',
