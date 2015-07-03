@@ -3,6 +3,7 @@ import errno
 import logging
 import subprocess
 
+
 def invoke(*args):
     logging.info('invoking %s', args)
     try:
@@ -14,12 +15,17 @@ def invoke(*args):
         logging.info('%s success', args)
         return None
 
+
 def dump_process_error(e):
-    print '---------------------------------------------'
-    print 'Exit code: %d' % e.returncode
-    print 'Captured output:'
-    print e.output.strip()
-    print '---------------------------------------------'
+    print(
+        "---------------------------------------------\n"
+        "Exit code: %d\n"
+        "Captured output:\n"
+        "%s\n"
+        "---------------------------------------------"
+        % (e.returncode, e.output.strip())
+    )
+
 
 def mkdir_p(path):
     try:

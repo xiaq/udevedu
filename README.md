@@ -1,4 +1,4 @@
-# udevedu: udev Event Dispatcher for Unpriviledged user
+# udevedu: udev Event Dispatcher for Unprivileged user
 
 udevedu is a little tool that allows you to call a Python function on udev
 events.
@@ -34,7 +34,7 @@ Notes:
 
 ## Why not just write [udev rules](http://www.freedesktop.org/software/systemd/man/udev.html)?
 
-Because udevedu runs as an unpriviledged user in arbitrary environment - e.g.
+Because udevedu runs as an unprivileged user in arbitrary environment - e.g.
 from your WM script so that it can call `xset`, `notify-send` etc.
 
 Other small bonuses:
