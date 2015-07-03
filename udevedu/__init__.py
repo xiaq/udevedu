@@ -32,19 +32,11 @@ def process_hook(h, args):
     h.react(*args)
 
 
-def main():
-    loglevel = logging.WARN
-    if len(sys.argv) == 2 and sys.argv[1] == '-d':
-        loglevel = logging.INFO
-    logging.basicConfig(
-        level=loglevel,
-        format='%(asctime)s %(levelname)s %(message)s',
-        datefmt='%F %T'
-    )
-
-    save_config_path('udevedu', 'hooks')
-    hooks_dir = load_first_config('udevedu', 'hooks')
-
+def load_hooks(hooks_dir):
+    """
+    Load hooks in alphabetical order and then run their init functions in the
+    same order.
+    """
     hooks = []
 
     # Load all hooks
@@ -67,6 +59,23 @@ def main():
             except Exception as e:
                 logging.error('Initialization of %s failed', h.__file__)
                 logging.exception(e)
+    return hooks
+
+
+def main():
+    loglevel = logging.WARN
+    if len(sys.argv) == 2 and sys.argv[1] == '-d':
+        loglevel = logging.INFO
+    logging.basicConfig(
+        level=loglevel,
+        format='%(asctime)s %(levelname)s %(message)s',
+        datefmt='%F %T'
+    )
+
+    save_config_path('udevedu', 'hooks')
+    hooks_dir = load_first_config('udevedu', 'hooks')
+
+    hooks = load_hooks(hooks_dir)
 
     try:
         context = pyudev.Context()
